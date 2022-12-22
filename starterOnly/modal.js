@@ -11,7 +11,7 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
-const closeBtn = document.querySelectorAll(".close");
+const closeBtn = document.querySelectorAll("[data-close-modal]");
 
 
 // launch modal event
@@ -39,9 +39,105 @@ function validate(e, form) {
   let validated = true;
   let error_container = [];
   //let required = ["first", "last", "email", "location", "consent"];
-  const email_regexp = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+  let input_cond = getInputConditions();
 
-  let input_cond = {
+  for(let key in input_cond){
+
+
+    if(data.has(key)){
+      let val = data.get(key);
+      if(!validateField(val, input_cond[key])){
+        let check = input_cond[key].check;
+        if((check.hasOwnProperty("required") && check.required === true) || !isEmpty(val))
+        {
+          let err = createError(key, input_cond[key].error);
+          error_container.push(err);
+        }
+      }
+    }
+    else
+    {
+      let cond = input_cond[key].check;
+      if(cond.hasOwnProperty("required") && cond.required === true){
+        let err = createError(key, input_cond[key].error);
+        error_container.push(err);
+      }
+    }
+
+  }
+
+  /*for(let [key, val] of data.entries()){
+
+    if(input_cond.hasOwnProperty(key))
+    {
+      if(!validateField(val, input_cond[key])){
+        let error = {
+          key: {
+            error: input_cond[key].error
+          }
+        };
+        error_container.push(error);
+      }
+    }
+
+  }*/
+
+
+  if(!isEmpty(error_container)){
+
+    console.error("Error in form required fields", error_container);
+
+    for(let i = 0; i < error_container.length; i++){
+      showError(error_container[i].error);
+    }
+  }
+  else{
+    confirmModal();
+  }
+
+}
+
+function isEmpty(val){
+
+  let res = false;
+
+  if(val === null || val === undefined || val === "" || val.length === 0){
+    res = true;
+  }
+
+  return res;
+
+}
+
+function validateField(val, conditions){
+
+  let res = false;
+
+  let check = conditions.check;
+
+  for (let ch in check){
+
+    //console.log(ch);
+    if (check.hasOwnProperty(ch)) {
+
+      if(typeof window[ch] !== undefined) {
+        res = window[ch](val, check[ch]);
+      }
+
+      if(!res) break;
+
+    }
+
+  }
+
+  return res;
+
+}
+
+function getInputConditions() {
+
+  const email_regexp = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+  return {
     first: {
       check: {
         required: true,
@@ -105,102 +201,11 @@ function validate(e, form) {
         value: "on"
       },
       error : {
-        err_message: "Champ obligatoire",
+        err_message: "Veuillez accepter les conditions d'utilisation",
         input: "#checkbox1"
       }
     }
   }
-
-  for(let key in input_cond){
-
-
-    if(data.has(key)){
-      let val = data.get(key);
-      if(!validateField(val, input_cond[key])){
-        let check = input_cond[key].check;
-        if((check.hasOwnProperty("required") && check.required === true) || !isEmpty(val))
-        {
-          let err = createError(key, input_cond[key].error);
-          error_container.push(err);
-        }
-      }
-    }
-    else
-    {
-      let cond = input_cond[key].check;
-      if(cond.hasOwnProperty("required") && cond.required === true){
-        let err = createError(key, input_cond[key].error);
-        error_container.push(err);
-      }
-    }
-
-  }
-
-  /*for(let [key, val] of data.entries()){
-
-    if(input_cond.hasOwnProperty(key))
-    {
-      if(!validateField(val, input_cond[key])){
-        let error = {
-          key: {
-            error: input_cond[key].error
-          }
-        };
-        error_container.push(error);
-      }
-    }
-
-  }*/
-
-
-  if(!isEmpty(error_container)){
-
-    console.error("Error in form required fields", error_container);
-
-    for(let i = 0; i < error_container.length; i++){
-      showError(error_container[i].error);
-    }
-  }
-  else{
-    console.log("Form is ok to send !");
-  }
-
-}
-
-function isEmpty(val){
-
-  let res = false;
-
-  if(val === null || val === undefined || val === "" || val.length === 0){
-    res = true;
-  }
-
-  return res;
-
-}
-
-function validateField(val, conditions){
-
-  let res = false;
-
-  let check = conditions.check;
-
-  for (let ch in check){
-
-    //console.log(ch);
-    if (check.hasOwnProperty(ch)) {
-
-      if(typeof window[ch] !== undefined) {
-        res = window[ch](val, check[ch]);
-      }
-
-      if(!res) break;
-
-    }
-
-  }
-
-  return res;
 
 }
 
@@ -212,6 +217,18 @@ function required(val, cond){
   else if(cond === false) res = true;
 
   return res;
+
+}
+
+function confirmModal(){
+
+  $confirm = document.querySelector(".modal-confirmation");
+
+  if(!isEmpty($confirm)){
+
+    $confirm.classList.add("active");
+
+  }
 
 }
 
