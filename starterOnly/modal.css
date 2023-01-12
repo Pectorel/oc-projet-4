@@ -13,7 +13,6 @@
 body {
   display: flex;
   flex-direction: column;
-  /*background-image: url("background.png");*/
   font-family: var(--font-default);
   font-size: 18px;
   max-width: 1300px;
@@ -31,7 +30,7 @@ img {
 
 .topnav {
   overflow: hidden;
-  margin: 3.5%;
+  padding: 2rem;
 }
 .header-logo {
     float: left;
@@ -68,59 +67,13 @@ img {
   display: none;
 }
 
-@media screen and (max-width: 840px) {
-  .topnav.responsive {
-    position: relative;
-  }
-  .topnav.responsive .main-navbar{
-
-  }
-  .topnav.responsive .icon {
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #fff;
-  }
-  .topnav.responsive a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-  .topnav a {display: none;}
-  .topnav a.icon {
-    float: right;
-    display: block;
-    color: #ff001b;
-  }
-
-  .header-logo{
-    margin-top: 6px;
-  }
-
-}
-
-@media screen and (max-width: 530px){
-
-  .header-logo img{
-    width: 150px;
-    margin-top: 8px;
-  }
-
-}
-
-@media screen and (max-width: 394px){
-  .topnav.responsive .icon {
-    color: #ff001b;
-  }
-}
-
 main {
   font-size: 130%;
   font-weight: bolder;
   color: black;
-  padding-top: 0.5vw;
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding-top: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
   border-radius: 2rem;
   text-align: justify;
 
@@ -181,11 +134,12 @@ main {
 }
 
 .content {
-  margin: 5% auto;
+  margin: auto;
   width: 100%;
   max-width: 500px;
   animation-name: modalopen;
   animation-duration: var(--modal-duration);
+  animation-fill-mode: forwards;
   background: #232323;
   border-radius: 10px;
   overflow: hidden;
@@ -238,12 +192,6 @@ input {
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
-/* 
-input[data-error]::after {
-    content: attr(data-error);
-    font-size: 0.4em;
-    color: red;
-} */
 .checkbox-label,
 .checkbox2-label {
   position: relative;
@@ -488,58 +436,8 @@ footer {
   padding-left: 2vw;
   padding-right: 2vw;
 }
-@media screen and (max-width: 920px) {
 
-  main{
-    padding: 0 1rem;
-  }
-
-  .topnav{
-    margin: 3.5% 1rem;
-  }
-
-  .hero-section {
-    display: block;
-    box-shadow: unset;
-    margin-bottom: 0;
-  }
-  .hero-content {
-    background: #fff;
-    color: #000;
-    padding: 0;
-    min-width: unset;
-  }
-  .hero-content::after {
-    content: unset;
-  }
-  .hero-content .btn-signup {
-    display: none;
-  }
-  .hero-headline {
-    font-size: 2.5rem;
-    white-space: normal;
-  }
-  .hero-text {
-    width: unset;
-    font-size: .975rem;
-  }
-  .hero-img img {
-    border-radius: 10px;
-    margin-top: 40px;
-    margin-left: 0;
-    width: 100%;
-  }
-  .hero-section > .btn-signup {
-    display: block;
-    margin: 32px auto 10px;
-    padding: 12px 35px;
-  }
-  .copyrights {
-    margin: 30px 0;
-    text-align: center;
-  }
-}
-
+/* Animations */
 @keyframes modalopen {
   from {
     opacity: 0;
@@ -547,6 +445,32 @@ footer {
   }
   to {
     opacity: 1;
+    margin-top: 150px;
+  }
+}
+
+
+@keyframes modalopentablet {
+
+  from {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+  to {
+    opacity: 1;
+    margin-top: 120px;
+  }
+
+}
+
+@keyframes modalopenmobile {
+  from {
+    opacity: 0;
+    transform: translateY(-150px);
+  }
+  to {
+    opacity: 1;
+    margin-top:88px;
   }
 }
 
@@ -622,4 +546,144 @@ footer {
 
   }
 
+}
+
+@media screen and (max-width: 920px) {
+
+
+  .topnav{
+    padding: 2rem 1rem;
+  }
+
+  main{
+    padding: 0 1rem;
+  }
+
+  .hero-section {
+    display: block;
+    box-shadow: unset;
+    margin-bottom: 0;
+  }
+  .hero-content {
+    background: #fff;
+    color: #000;
+    padding: 0;
+    min-width: unset;
+  }
+  .hero-content::after {
+    content: unset;
+  }
+  .hero-content .btn-signup {
+    display: none;
+  }
+  .hero-headline {
+    font-size: 2.5rem;
+    white-space: normal;
+  }
+  .hero-text {
+    width: unset;
+    font-size: .975rem;
+  }
+  .hero-img img {
+    border-radius: 10px;
+    margin-top: 40px;
+    margin-left: 0;
+    width: 100%;
+  }
+  .hero-section > .btn-signup {
+    display: block;
+    margin: 32px auto 10px;
+    padding: 12px 35px;
+  }
+  .copyrights {
+    margin: 30px 0;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 840px) {
+
+  /* Header */
+  .topnav{
+    position: fixed !important;
+    z-index: 12;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    background: #fff;
+    min-height: 112px;
+  }
+  .topnav.responsive{
+    box-shadow: 0 2px 6px 1px rgba(0, 0, 0, .2);
+    padding-bottom: 0;
+  }
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 1rem;
+    top: 2rem;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav a {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+    color: #ff001b;
+  }
+  .topnav.responsive .main-navbar{
+
+    margin-top: 10px;
+    width: 100%;
+
+  }
+
+  .header-logo{
+    margin-top: 6px;
+  }
+
+  main{
+    margin-top: 112px;
+  }
+
+  /* modal */
+  /* Change animation */
+  .content{
+
+    animation-name: modalopentablet;
+
+  }
+}
+
+@media screen and (max-width: 530px){
+
+
+  .topnav{
+    padding: 1rem;
+    min-height: 88px;
+  }
+  .topnav.responsive .icon{
+    top: 1rem;
+  }
+
+  .header-logo img{
+    width: 150px;
+    margin-top: 8px;
+  }
+
+  /* Modal */
+  .content{
+
+    animation-name: modalopenmobile;
+
+  }
+
+}
+
+@media screen and (max-width: 394px){
+  .topnav.responsive .icon {
+    color: #ff001b;
+  }
 }
