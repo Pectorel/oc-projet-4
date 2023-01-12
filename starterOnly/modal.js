@@ -26,76 +26,91 @@ function closeModal(){
   modalbg.style.display = "none";
 }
 
+/*
+* Called on form submit
+*
+* Check the form fields and if they are valid
+*
+* */
 function validate(e, form) {
 
   if(e) e.preventDefault();
+  // We remove all previous error messages
   removeErrors();
   //console.log(form);
+  // Put all form data in data var
   let data = new FormData(form);
 
   //console.log(data.entries());
 
   let validated = true;
+  // Will contains all error messages if fields are invalid
   let error_container = [];
   //let required = ["first", "last", "email", "location", "consent"];
+  // Get the condition json to validate each field
   let input_cond = getInputConditions();
 
+  // We go through our condition object
   for(let key in input_cond){
 
-
+    // If input is present in the DataForm
     if(data.has(key)){
       let val = data.get(key);
+
+      // We try to validate the value of the input
       if(!validateField(val, input_cond[key])){
         let check = input_cond[key].check;
+
+        // If input not valid, we create an error
         if((check.hasOwnProperty("required") && check.required === true) || !isEmpty(val))
         {
-          let err = createError(key, input_cond[key].error);
+          let err = createError(input_cond[key].error);
           error_container.push(err);
         }
+
       }
+
     }
     else
     {
+
+
       let cond = input_cond[key].check;
+
+      // We check if the element is required, and if it is then we create an error
       if(cond.hasOwnProperty("required") && cond.required === true){
-        let err = createError(key, input_cond[key].error);
+        let err = createError(input_cond[key].error);
         error_container.push(err);
       }
+
     }
 
   }
 
-  /*for(let [key, val] of data.entries()){
 
-    if(input_cond.hasOwnProperty(key))
-    {
-      if(!validateField(val, input_cond[key])){
-        let error = {
-          key: {
-            error: input_cond[key].error
-          }
-        };
-        error_container.push(error);
-      }
-    }
-
-  }*/
-
-
+  // If there is at least 1 error
   if(!isEmpty(error_container)){
 
-    console.error("Error in form required fields", error_container);
+    //console.error("Error in form required fields", error_container);
 
     for(let i = 0; i < error_container.length; i++){
       showError(error_container[i].error);
     }
   }
+  // Else we confirm the registration
   else{
     confirmModal();
   }
 
 }
 
+/*
+*
+* Check if a variable is empty
+*
+* Return bool (true if empty, false if not)
+*
+* */
 function isEmpty(val){
 
   let res = false;
@@ -108,6 +123,11 @@ function isEmpty(val){
 
 }
 
+/*
+* Verify if a field is correct with given value and conditions
+*
+* Return bool (true if val is valid, else false)
+* */
 function validateField(val, conditions){
 
   let res = false;
@@ -133,6 +153,12 @@ function validateField(val, conditions){
 
 }
 
+/*
+*
+* Returns the json object containing all the fields conditions
+*
+*
+* */
 function getInputConditions() {
 
   const email_regexp = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
@@ -208,17 +234,11 @@ function getInputConditions() {
 
 }
 
-function required(val, cond){
-
-  let res = false;
-
-  if(!isEmpty(val) && cond === true) res = true;
-  else if(cond === false) res = true;
-
-  return res;
-
-}
-
+/*
+*
+* Show the confirmation div for registration
+*
+* */
 function confirmModal(){
 
   $confirm = document.querySelector(".modal-confirmation");
@@ -231,6 +251,34 @@ function confirmModal(){
 
 }
 
+/*
+* Field Check function
+*
+* Check if val is required and not empty
+*
+*
+* Return bool (true if value is valid, else false)
+*
+* */
+function required(val, cond){
+
+  let res = false;
+
+  if(!isEmpty(val) && cond === true) res = true;
+  else if(cond === false) res = true;
+
+  return res;
+
+}
+
+/*
+* Field Check function
+*
+* Check if val type is of the type provided in the "cond" parameter
+*
+* Return bool (true if value is valid, else false)
+*
+* */
 function type(val, cond){
 
   let res = false;
@@ -245,6 +293,14 @@ function type(val, cond){
 
 }
 
+/*
+* Field Check function
+*
+* Check if val type has enough characters
+*
+* Return bool (true if value is valid, else false)
+*
+* */
 function min_char(val, cond) {
 
   let res = false;
@@ -255,6 +311,14 @@ function min_char(val, cond) {
 
 }
 
+/*
+* Field Check function
+*
+* Check if val is following correctly the given pattern
+*
+* Return bool (true if value is valid, else false)
+*
+* */
 function pattern(val, cond){
 
   let res = false;
@@ -265,6 +329,14 @@ function pattern(val, cond){
 
 }
 
+/*
+* Field Check function
+*
+* Check if the val type minimum is equal or higher than given number
+*
+* Return bool (true if value is valid, else false)
+*
+* */
 function min(val, cond){
 
   let res = false;
@@ -275,6 +347,14 @@ function min(val, cond){
 
 }
 
+/*
+* Field Check function
+*
+* Check if the val has the correct value (useful for checkbox)
+*
+* Return bool (true if value is valid, else false)
+*
+* */
 function value(val, cond){
 
   let res = false;
@@ -285,22 +365,30 @@ function value(val, cond){
 
 }
 
-function createError(key, error_data){
+/*
+*
+* Create and return a json object containing the error infos
+*
+*  */
+function createError(error_data){
 
-  let res = {
+  return {
     error: error_data
   };
 
-  return res;
-
 }
 
+/*
+*
+* Show all error message for all invalid inputs in form
+*
+*  */
 function showError(err) {
 
 
   let $elem = document.querySelector(err.input);
 
-  console.log($elem);
+  //console.log($elem);
 
   if(!isEmpty($elem)) {
     let $container = $elem.closest(".formData");
@@ -310,18 +398,26 @@ function showError(err) {
 
       let $error_div = document.createElement("div");
       $error_div.classList.add("errorDiv");
+
       let $message = document.createElement("p");
       $message.classList.add("errorDiv-message")
       $message.innerHTML = err.err_message;
+
       $error_div.appendChild($message);
 
       $container.appendChild($error_div);
 
     }
+
   }
 
 }
 
+/*
+*
+* Removes all the error messages for all inputs in the register form
+*
+* */
 function removeErrors(){
 
   let $errors = document.querySelectorAll(".errorDiv");
