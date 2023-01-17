@@ -11,6 +11,7 @@ function editNav() {
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const closeBtn = document.querySelectorAll("[data-close-modal]");
+const $confirm = document.querySelector(".modal-confirmation");
 
 
 // launch modal event
@@ -24,6 +25,7 @@ function launchModal() {
 
 function closeModal(){
   modalbg.style.display = "none";
+  resetModal();
 }
 
 /*
@@ -193,7 +195,7 @@ function getInputConditions() {
         pattern: email_regexp
       },
       error: {
-        err_message: "L'adresse e-mail doit être renseignée et dans un format valide <span class='text-italic'>example@gmail.com</span>",
+        err_message: "L'adresse e-mail doit être renseignée et dans un format valide <span class='text-italic'>exemple@gmail.com</span>",
         input: "#email"
       }
 
@@ -230,7 +232,7 @@ function getInputConditions() {
         input: "#checkbox1"
       }
     }
-  }
+  };
 
 }
 
@@ -241,11 +243,34 @@ function getInputConditions() {
 * */
 function confirmModal(){
 
-  $confirm = document.querySelector(".modal-confirmation");
-
   if(!isEmpty($confirm)){
 
     $confirm.classList.add("active");
+
+  }
+
+}
+
+/*
+*
+* Reset the modal :
+*   - remove confirmation message
+*   - Reset form inputs
+*
+* */
+function resetModal(){
+
+  if(!isEmpty($confirm)){
+
+    $confirm.classList.remove("active");
+
+  }
+
+  let $form = document.querySelector("#reserve");
+
+  if(!isEmpty($form)) {
+
+    $form.reset();
 
   }
 
