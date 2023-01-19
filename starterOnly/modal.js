@@ -159,7 +159,6 @@ function validateField(val, conditions){
 *
 * Returns the json object containing all the fields conditions
 *
-*
 * */
 function getInputConditions() {
 
