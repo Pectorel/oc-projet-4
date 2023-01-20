@@ -199,6 +199,16 @@ function getInputConditions() {
       }
 
     },
+    birthdate: {
+      check: {
+        required: true,
+        type: "date"
+      },
+      error: {
+        err_message: "Veuillez indiquer votre date de naissance",
+        input : "#birthdate"
+      }
+    },
     quantity: {
       check: {
         required: false,
@@ -312,6 +322,14 @@ function type(val, cond){
   {
     if(parseInt(val) == val) res = true;
   }
+  else if(cond === "date")
+  {
+
+    let date = Date.parse(val);
+
+    if(!isNaN(date)) res = true;
+
+  }
 
   return res;
 
@@ -424,7 +442,7 @@ function showError(err) {
       $error_div.classList.add("errorDiv");
 
       let $message = document.createElement("p");
-      $message.classList.add("errorDiv-message")
+      $message.classList.add("errorDiv-message");
       $message.innerHTML = err.err_message;
 
       $error_div.appendChild($message);
